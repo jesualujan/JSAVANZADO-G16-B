@@ -1,0 +1,12 @@
+{
+  "name": "03pokeapiget",
+  "version": "1.0.0",
+  "description": "consumiendo nuestra primera API",
+  "main": "index.js",
+  "scripts": {},
+  "author": "luján",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.88.2"
+  }
+}
