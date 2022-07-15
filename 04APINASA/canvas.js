@@ -1,118 +1,74 @@
-particlesJS("particles-js", {
-  "particles": {
-    "number": {
-      "value": 80,
-      "density": {
-        "enable": true,
-        "value_area": 800
-      }
-    },
-    "color": {
-      "value": "#FFFFFF"
-    },
-    "shape": {
-      "type": "circle",
-      "stroke": {
-        "width": 0,
-        "color": "#000000"
-      },
-      "polygon": {
-        "nb_sides": 5
-      },
-      "image": {
-        "src": "img/github.svg",
-        "width": 100,
-        "height": 100
-      }
-    },
-    "opacity": {
-      "value": 0.5,
-      "random": false,
-      "anim": {
-        "enable": false,
-        "speed": 1,
-        "opacity_min": 0.1,
-        "sync": false
-      }
-    },
-    "size": {
-      "value": 20,
-      "random": true,
-      "anim": {
-        "enable": false,
-        "speed": 40,
-        "size_min": 0.1,
-        "sync": false
-      }
-    },
-    "line_linked": {
-      "enable": true,
-      "distance": 150,
-      "color": "#FFFFFF",
-      "opacity": 0.22,
-      "width": 1
-    },
-    "move": {
-      "enable": true,
-      "speed": 6,
-      "direction": "none",
-      "random": false,
-      "straight": false,
-      "out_mode": "out",
-      "attract": {
-        "enable": false,
-        "rotateX": 600,
-        "rotateY": 1200
-      }
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function shuffle(arr, number, duplicate) {
+  const newArray = [];
+  do {
+    const randomIndex = getRandomInt(0, arr.length),
+      newItem = newArray.find((el) => el === arr[randomIndex]);
+    if (!newItem || (newItem && duplicate)) {
+      newArray.push(arr[randomIndex]);
     }
-  },
-  "interactivity": {
-    "detect_on": "canvas",
-    "events": {
-      "onhover": {
-        "enable": true,
-        "mode": "repulse"
-      },
-      "onclick": {
-        "enable": true,
-        "mode": "push"
-      },
-      "resize": true
-    },
-    "modes": {
-      "grab": {
-        "distance": 300,
-        "line_linked": {
-          "opacity": 1
-        }
-      },
-      "bubble": {
-        "distance": 300,
-        "size": 40,
-        "duration": 2,
-        "opacity": 8,
-        "speed": 3
-      },
-      "repulse": {
-        "distance": 200
-      },
-      "push": {
-        "particles_nb": 4
-      },
-      "remove": {
-        "particles_nb": 2
-      }
-    }
-  },
-  "retina_detect": true,
-  "config_demo": {
-    "hide_card": false,
-    "background_color": "#B61924",
-    "background_image": "",
-    "background_position": "",
-    "background_repeat": "no-repeat",
-    "background_size": "cover"
+  } while (arr.length !== newArray.length);
+
+  if (number === 0) {
+    return newArray;
+  } else if (number <= arr.length || duplicate) {
+    return newArray.slice(0, number);
+  } else {
+    return newArray[0];
   }
+}
+
+function generate() {
+  const container = document.querySelector(".container"),
+    numStar = window.innerWidth / 2;
+
+  container.childNodes.forEach((child) => container.removeChild(child));
+
+  for (let i = 0; i < numStar; i++) {
+    const star = {},
+      size = getRandomInt(1, 4),
+      color = getRandomInt(100, 255),
+      blueOrYellow = shuffle([true, false]),
+      domStar = document.createElement("div");
+    domStar.classList.add("star");
+    container.appendChild(domStar);
+    domStar.style = `
+        left: ${getRandomInt(0, window.innerWidth)}px;
+        bottom: ${getRandomInt(0, window.innerHeight)}px;
+        width: ${size}px;
+        height: ${size}px;
+        background: rgb(${!blueOrYellow ? color : "255"},255,${
+      blueOrYellow ? color : "255"
+    });
+        box-shadow: ${getRandomInt(0, 5)}px ${getRandomInt(0, 5)}px ${
+      size * 5
+    }px rgb(${!blueOrYellow ? color : "255"},255,${
+      blueOrYellow ? color : "255"
+    });
+        filter: blur(${getRandomInt(0, 1)}px)
+       `;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", (_) => {
+  generate();
+  setInterval((_) => {
+    const generateStars = document.querySelectorAll(".star");
+    if (generateStars.length > 0) {
+      const randomStar = getRandomInt(0, generateStars.length - 1);
+      setTimeout((_) => {
+        generateStars[randomStar].style.opacity = getRandomInt(0, 5);
+        setTimeout((_) => {
+          generateStars[randomStar].style.opacity = 1;
+        }, getRandomInt(20, 1000));
+      }, getRandomInt(50, 1000));
+    }
+  }, 100);
 });
 
-
+window.addEventListener("resize", generate);
