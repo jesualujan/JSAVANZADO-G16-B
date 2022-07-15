@@ -28,11 +28,69 @@ Object.keys(respuestaApiJson.near_earth_objects).forEach(elemento=>{
 })
 */
 //EJEMPLO DE ENDPOINT MARTE
+function fechaHoy(){
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today =yyyy +"-"+ mm + '-' + dd;
+    return today    
+
+
+
+}
+function fechaIngrid(){
+    let date = new Date;
+    date = date.toLocaleString('en-US', {
+        timeZone: 'America/Los_Angeles',
+      }).split(",")[0].replace("/","-").replace("/","-")
+      console.log(date)
+      //.toISOString().split('T')[0];
+    return date 
+}
 const marte = async(rov,cam,sol)=>{
     var martianApi = `https://api.nasa.gov/mars-photos/api/v1/rovers/${rov}/photos?sol=${sol}&camera=${cam}&api_key=${llave}`
+    let fechaFoto = fechaHoy()
+    let fechaFotoIngrid = fechaIngrid()
+    
+    var fotoDia = `https://api.nasa.gov/planetary/apod?start_date=${fechaFoto}&end_date=${fechaFoto}&api_key=${llave}`
     const resultadoMarte = await fetch(martianApi)
     const marteJson = await resultadoMarte.json()
+    const resultadoFotoDia = await fetch(fotoDia)
+    const fotoJson = await resultadoFotoDia.json()
+    console.log(fotoJson)
+    
     console.log(marteJson)
+    let cartasDiv = document.getElementById("contenedorCartas")
+    while (cartasDiv.firstChild){
+        cartasDiv.removeChild(cartasDiv.firstChild)
+    }
+    let arregloFotos = marteJson.photos
+    if (arregloFotos.length == 0){
+        cartasDiv.innerHTML = `<div class="card col-sm-12 col-md-12 col-lg-12" style="width: 18rem;">
+        <img class="card-img-top" src=${fotoJson[0].url} alt=${fotoJson[0].copyright}>
+        <div class="card-body">
+          <h5 class="card-title">${fotoJson[0].title}</h5>
+          <p class="card-text">${fotoJson[0].explanation}</p>
+          
+        </div>
+      </div>`
+    }else{
+        arregloFotos.forEach(foto=>{
+            cartasDiv.innerHTML += `<div class="card mb-2 col-sm-12 col-md-6 col-lg-4" style="width: 18rem;">
+            <img class="card-img-top" src=${foto.img_src} alt=${foto.id}>
+            <div class="card-body">
+              <h5 class="card-title">${foto.rover.name}</h5>
+              <p class="card-text">${foto.camera.full_name}</p>
+              <p class="card-text">Foto tomada el día: ${foto.earth_date}</p>
+            </div>
+          </div>`
+        })
+
+
+    }
+    
 }
 function traerDatos(){
     let rover = document.getElementById("roverid")
