@@ -32,12 +32,27 @@
         })
  } 
 
+//* CREAR UN AUTHOR - USAMOS UN OBJETO CON INFORMACION A CREAR Y PARA ELLO NECESITAMOS USAR UN FORMATO JSON
+    const createAuthor = (jsonData) => {
+        const objConfig = {
+            url: URI, //APARTADO PARA CREAR EL AUTOR /api/v1/authors/
+            form: jsonData // ESTA ES MI DATA EN FORMATO JSON
+        }
 
-
-
+        //HACER LA PETICIÓN
+        request.post(objConfig, (error,response,body) => { 
+            if(response.statusCode === 201){
+                const createAuthor = JSON.parse(body)
+                console.log("AUTOR CREADO EXITOSAMENTE", createAuthor)
+            }else{
+                console.log(response.statusCode,response.statusMessage)
+            }             //       404                     NOT FOUND
+        })
+    }
 
 
 module.exports = {
     listAuthors,
-    getAuthor
+    getAuthor,
+    createAuthor
 }
