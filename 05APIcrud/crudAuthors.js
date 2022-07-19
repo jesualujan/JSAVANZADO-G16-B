@@ -50,9 +50,39 @@
         })
     }
 
+//* PARTIAL UPDATE DE UN AUTOR 
+        const patchAuthor = (id, jsonData) => {
+            const objConfig = {
+                url: URI+id+'/' ,
+                form: jsonData // ESTA ES MI DATA EN FORMATO JSON
+            }
+
+            request.patch(objConfig, (error,response,body) => {
+                if(response.statusCode === 200){
+                    const author = JSON.parse(body)
+                    console.log(author)
+                }else{
+                    console.log(response.statusCode,response.statusMessage)
+                }            //       404                     NOT FOUND
+            })
+        }
+
+//* ELIMINAR UN AUTOR
+    const deleteAuthor = (id) => {
+        request.delete(URI+id+'/',(error,response,body) => {
+            if(response.statusCode === 204) {
+                console.log("el autor fue eliminado exitosamente")
+            }else{
+                console.log(response.statusCode,response.statusMessage)
+            }
+        })
+    }
+
 
 module.exports = {
     listAuthors,
     getAuthor,
-    createAuthor
+    createAuthor,
+    patchAuthor,
+    deleteAuthor
 }
