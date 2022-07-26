@@ -1,6 +1,9 @@
 import SpotifyWebApi from "spotify-web-api-node"
-var clientId = "d8dbb0d116a94e168aabde73f2ddf285"
-var clientSecret = "276f2d76d757441e98f35aab0fc8c4a6"
+import {} from "dotenv/config"
+console.log("Este es mi ID")
+console.log(process.env.CLIENT_ID)
+var clientId = process.env.CLIENT_ID
+var clientSecret = process.env.CLIENT_SECRET
 
 var spotifyApi = new SpotifyWebApi({
     clientId: clientId,

@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"nodemon index.js"
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.1",
     "nodemon": "^2.0.19",
     "spotify-web-api-node": "^5.0.2"
   },
-  "type":"module"
+  "type": "module"
 }
